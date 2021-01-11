@@ -179,7 +179,7 @@ function wordpressImport(backupXmlFile, outputDir){
                         markdown = tds.turndown(content);
                         // console.log(markdown);
 
-                        fileHeader = `---\ntitle: '${title}'\ndate: ${published}\ndraft: ${draft}\n${tagString}---\n`;
+                        fileHeader = `---\ntitle: "${title}"\ndate: ${published}\ndraft: ${draft}\n${tagString}---\n`;
                         fileContent = `${fileHeader}\n${markdown}`;
                         pmap.header = `${fileHeader}\n`;
 
@@ -340,7 +340,7 @@ function bloggerImport(backupXmlFile, outputDir){
                         var tagString='';
 
                         if(tags.length){
-                            tagString=`tags : [${tags.join(', ')}]\n`;
+                            tagString=`article-tags : ["${tags.join('", "')}"]\n`;
                         }
 
                         console.dir(postMap);
@@ -348,8 +348,10 @@ function bloggerImport(backupXmlFile, outputDir){
                         console.log("\n\n\n\n\n");
 
                         var alias = url.replace(/^.*\/\/[^\/]+/, '');
+                        var alias = alias.slice(8, -5)
+                        var published = published[0].slice(0, -19)
 
-                        fileHeader = `---\ntitle: '${title}'\ndate: ${published}\ndraft: false\naliases: [ "${alias}" ]\n${tagString}---\n`;
+                        fileHeader = `---\ntitle: '${title}'\ndate: "${published}"\ndraft: false\npath: "/articles${alias}"\n${tagString}---\n`;
                         fileContent = `${fileHeader}\n${markdown}`;
 
                         postMap.header = fileHeader;
